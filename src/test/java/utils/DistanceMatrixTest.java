@@ -30,5 +30,9 @@ public class DistanceMatrixTest {
 
         System.out.println(Arrays.deepToString(matrix).replace("], ", "]\n"));
 
+
+
+
+
     }
 }

@@ -31,8 +31,13 @@ public class DataParser {
         List<City> cities = new ArrayList<>();
 
         for (int i = 0; i < dimensions; i++) {
-            String[] split = reader.readLine().split("\\s+");
+            String line = reader.readLine();
+            if (line.equals("EOF")) break;
+
+            String[] split = line.split("\\s+");
             cities.add(new City(Double.parseDouble(split[1]), Double.parseDouble(split[2])));
+
+
         }
 
         return cities;

@@ -11,14 +11,15 @@ import java.util.List;
  * Contact: chepurin.ivan@gmail.com
  * Github:chepiv
  */
-public class Genome {
+public class Genome implements Comparable<Genome>{
 
-    List<Integer> route;
+    private List<Integer> route;
 
-    int startingCity;
-    int numberOfCities;
-    int fitness;
-    double [][] distances;
+    private int startingCity;
+    private int numberOfCities;
+    private int fitness;
+
+    private double [][] distances;
 
 
     public Genome(List<Integer> route, int startingCity, int numberOfCities, int fitness) {
@@ -29,12 +30,12 @@ public class Genome {
         distances = MatrixSingleton.getInstance().getDistances();
     }
 
-    public Genome(int startingCity, int numberOfCities, int fitness) {
-        this.route = randomSalesman();
-        this.startingCity = startingCity;
+    public Genome(int startingCity, int numberOfCities) {
         this.numberOfCities = numberOfCities;
-        this.fitness = fitness;
+        this.startingCity = startingCity;
         distances = MatrixSingleton.getInstance().getDistances();
+        this.route = randomSalesman();
+        this.fitness = calculateFitness();
     }
 
     private List<Integer> randomSalesman() {
@@ -62,5 +63,24 @@ public class Genome {
         fitness += distances[route.get(numberOfCities-2)][startingCity];
 
         return fitness;
+    }
+
+    public int getFitness() {
+        return fitness;
+    }
+
+    @Override
+    public String toString() {
+        return "Genome{" +
+                "route=" + route +
+                ", startingCity=" + startingCity +
+                ", numberOfCities=" + numberOfCities +
+                ", fitness=" + fitness +
+                '}';
+    }
+
+    @Override
+    public int compareTo(Genome o) {
+        return Integer.compare(this.fitness, o.fitness);
     }
 }
