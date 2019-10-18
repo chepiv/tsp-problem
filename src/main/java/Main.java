@@ -1,9 +1,13 @@
+import algorithm.TravelingSalesman;
+import com.google.common.collect.Lists;
 import model.City;
+import model.Genome;
 import utils.DataParser;
 import utils.DistanceMatrix;
 import utils.MatrixSingleton;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,6 +25,25 @@ public class Main {
 
         MatrixSingleton matrixSingleton = MatrixSingleton.getInstance();
 
+
+        int populationSize = 20;
+        ArrayList<Genome> population = Lists.newArrayList();
+        for (int i = 0; i < populationSize; i++) {
+            population.add(new Genome(0,cities.size()));
+        }
+
+        int reproductionSize = 2;
+        int tournamentSize = 3;
+        int genomeSize = population.get(0).getRoute().size();
+        TravelingSalesman algorithm = new TravelingSalesman(genomeSize, reproductionSize, tournamentSize);
+
+        List<Genome> selection = algorithm.selection(population);
+
+        selection.forEach(System.out::println);
+
+        System.out.println();
+
+        algorithm.crossover(selection).forEach(System.out::println);
 
     }
 }

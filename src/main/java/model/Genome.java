@@ -22,12 +22,12 @@ public class Genome implements Comparable<Genome>{
     private double [][] distances;
 
 
-    public Genome(List<Integer> route, int startingCity, int numberOfCities, int fitness) {
-        this.route = route;
-        this.startingCity = startingCity;
+    public Genome(List<Integer> route, int startingCity, int numberOfCities) {
         this.numberOfCities = numberOfCities;
-        this.fitness = fitness;
+        this.startingCity = startingCity;
         distances = MatrixSingleton.getInstance().getDistances();
+        this.route = route;
+        this.fitness = calculateFitness();
     }
 
     public Genome(int startingCity, int numberOfCities) {
@@ -39,7 +39,7 @@ public class Genome implements Comparable<Genome>{
     }
 
     private List<Integer> randomSalesman() {
-        List<Integer> result = new ArrayList<Integer>();
+        List<Integer> result = new ArrayList<>();
         for (int i = 0; i < numberOfCities; i++) {
             if (i != startingCity)
                 result.add(i);
@@ -52,14 +52,12 @@ public class Genome implements Comparable<Genome>{
         int fitness = 0;
         int currentCity = startingCity;
 
-        // Calculating path cost
         for (int gene : route) {
             fitness += distances[currentCity][gene];
             currentCity = gene;
         }
 
-        // We have to add going back to the starting city to complete the circle
-        // the genome is missing the starting city, and indexing starts at 0, which is why we subtract 2
+
         fitness += distances[route.get(numberOfCities-2)][startingCity];
 
         return fitness;
@@ -67,6 +65,10 @@ public class Genome implements Comparable<Genome>{
 
     public int getFitness() {
         return fitness;
+    }
+
+    public List<Integer> getRoute() {
+        return route;
     }
 
     @Override
