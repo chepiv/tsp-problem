@@ -3,12 +3,8 @@ package algorithm;
 import com.google.common.collect.Lists;
 import model.Genome;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by chepiv on 16/10/2019.
@@ -31,9 +27,10 @@ public class TravelingSalesman {
     private int targetFitness;
     private int tournamentSize;
 
-    public TravelingSalesman(int genomeSize, int reproductionSize, int tournamentSize) {
+    public TravelingSalesman(int genomeSize, int reproductionSize, int startingCity, int tournamentSize) {
         this.genomeSize = genomeSize;
         this.reproductionSize = reproductionSize;
+        this.startingCity = startingCity;
         this.tournamentSize = tournamentSize;
     }
 
@@ -46,7 +43,7 @@ public class TravelingSalesman {
         return selected;
     }
 
-    public static  List<Genome> pickNRandomElements(List<Genome> list, int n) {
+    public static List<Genome> pickNRandomElements(List<Genome> list, int n) {
         Collections.shuffle(list);
         return list.stream()
                 .limit(n)
@@ -58,33 +55,41 @@ public class TravelingSalesman {
         return Collections.min(selected);
     }
 
-    public List<Genome> crossover(List<Genome> parents){
-        int crossingPoint = new Random().nextInt(genomeSize);
+    public List<Genome> orderedCrossover(List<Genome> parents) {
+        int crossingPoint1 = new Random().nextInt(genomeSize - 1);
+        int crossingPoint2 = new Random().nextInt(genomeSize - 1);
+
+        int start = Math.min(crossingPoint1, crossingPoint2);
+        int end = Math.max(crossingPoint1, crossingPoint2);
 
         Genome dad = parents.get(0);
         Genome mom = parents.get(1);
 
-        List<Integer> firstDadPart = dad.getRoute().subList(0, crossingPoint);
-        List<Integer> secondDadPart = dad.getRoute().subList(crossingPoint, genomeSize);
+        List<Integer> dadRoute = dad.getRoute();
+        List<Integer> momRoute = mom.getRoute();
 
+        List<Integer> mainPart = dadRoute.subList(start, end);
 
-        List<Integer> firstMomPart = mom.getRoute().subList(0, crossingPoint);
-        List<Integer> secondMomPart = mom.getRoute().subList(crossingPoint, genomeSize);
+        Integer [] childRouteArray = new Integer[genomeSize];
+        Arrays.fill(childRouteArray,-1);
+        List<Integer> childRoute = Arrays.asList(childRouteArray);
 
-        List<Integer> childRoute1 = Stream
-                .concat(firstDadPart.stream(),secondMomPart.stream())
-                .collect(Collectors.toList());
+        int j = 0;
+        for (int i = start; i <end ; i++) {
+            childRoute.set(i,mainPart.get(j));
+            j++;
+        }
 
-        Genome child1 = new Genome(childRoute1, 0, childRoute1.size());
-
-        List<Integer> childRoute2 = Stream
-                .concat(firstMomPart.stream(),secondDadPart.stream())
-                .collect(Collectors.toList());
-
-        Genome child2 = new Genome(childRoute2, 0, childRoute1.size());
-
-        return Lists.newArrayList(child1,child2);
-
+        //TODO: change to check if present from HASHSET
+        for (int i = momRoute.size() - 1; i > 0; i--) {
+             if (childRoute.get(i) == -1){
+                 if (!childRoute.contains(momRoute.get(i))) {
+                     childRoute.set(i, momRoute.get(i));
+                 }
+             }
+        }
+        Genome child = new Genome(childRoute, startingCity, numberOfCities);
+        return Lists.newArrayList(child);
     }
 
 }

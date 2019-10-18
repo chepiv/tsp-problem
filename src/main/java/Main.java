@@ -24,18 +24,19 @@ public class Main {
         distanceMatrix.calculateMatrix();
 
         MatrixSingleton matrixSingleton = MatrixSingleton.getInstance();
+        int startingCity = 0;
 
 
         int populationSize = 20;
         ArrayList<Genome> population = Lists.newArrayList();
         for (int i = 0; i < populationSize; i++) {
-            population.add(new Genome(0,cities.size()));
+            population.add(new Genome(startingCity,cities.size()));
         }
 
         int reproductionSize = 2;
         int tournamentSize = 3;
         int genomeSize = population.get(0).getRoute().size();
-        TravelingSalesman algorithm = new TravelingSalesman(genomeSize, reproductionSize, tournamentSize);
+        TravelingSalesman algorithm = new TravelingSalesman(genomeSize, reproductionSize, startingCity, tournamentSize);
 
         List<Genome> selection = algorithm.selection(population);
 
@@ -43,7 +44,7 @@ public class Main {
 
         System.out.println();
 
-        algorithm.crossover(selection).forEach(System.out::println);
+        algorithm.orderedCrossover(selection).forEach(System.out::println);
 
     }
 }
