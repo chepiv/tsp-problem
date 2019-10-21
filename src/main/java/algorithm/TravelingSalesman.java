@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import model.Genome;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 /**
@@ -59,9 +60,13 @@ public class TravelingSalesman {
     public List<Genome> orderedCrossover(List<Genome> parents) {
         int crossingPoint1 = new Random().nextInt(genomeSize - 1);
         int crossingPoint2 = new Random().nextInt(genomeSize - 1);
+        int crossingPoint3 = new Random().nextInt(genomeSize - 1);
+        int crossingPoint4 = new Random().nextInt(genomeSize - 1);
 
         int start = Math.min(crossingPoint1, crossingPoint2);
         int end = Math.max(crossingPoint1, crossingPoint2);
+        int start1 = Math.min(crossingPoint3, crossingPoint4);
+        int end1 = Math.max(crossingPoint3, crossingPoint4);
 
         Genome dad = parents.get(0);
         Genome mom = parents.get(1);
@@ -70,7 +75,7 @@ public class TravelingSalesman {
         List<Integer> momRoute = mom.getRoute();
 
         List<Integer> mainPart = dadRoute.subList(start, end);
-        List<Integer> mainPart2 = momRoute.subList(start, end);
+        List<Integer> mainPart2 = momRoute.subList(start1, end1);
 
         Integer [] childRouteArray = new Integer[genomeSize];
         Arrays.fill(childRouteArray,-1);
@@ -83,8 +88,13 @@ public class TravelingSalesman {
         int j = 0;
         for (int i = start; i <end ; i++) {
             childRoute.set(i,mainPart.get(j));
-            childRoute2.set(i,mainPart2.get(j));
             j++;
+        }
+
+        int q = 0;
+        for (int i = start1; i <end1 ; i++) {
+            childRoute2.set(i,mainPart2.get(q));
+            q++;
         }
 
 
@@ -136,15 +146,16 @@ public class TravelingSalesman {
         Collections.swap(route, random.nextInt(route.size()-1),random.nextInt(route.size()-1));
     }
 
-    public List<Genome> swap(List<Genome> genomes){
-        genomes.forEach(this::swapMutation);
-        List<Genome> mutatedGenomes = new ArrayList<>();
+    public void swap(List<Genome> genomes, double pm){
+        double rand = ThreadLocalRandom.current().nextDouble(0, 1);
 
         for (Genome genome : genomes) {
-            Genome g = new Genome(genome.getRoute(), startingCity, numberOfCities);
-            mutatedGenomes.add(g);
+            if (rand <= pm) {
+                swapMutation(genome);
+                genome.recalculateFitness();
+            }
         }
-        return mutatedGenomes;
+
     }
 
 }

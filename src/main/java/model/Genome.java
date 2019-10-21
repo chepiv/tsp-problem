@@ -48,7 +48,7 @@ public class Genome implements Comparable<Genome>{
         return result;
     }
 
-    public int calculateFitness() {
+    private int calculateFitness() {
         int fitness = 0;
         int currentCity = startingCity;
 
@@ -61,6 +61,10 @@ public class Genome implements Comparable<Genome>{
         fitness += distances[route.get(numberOfCities-2)][startingCity];
 
         return fitness;
+    }
+
+    public void recalculateFitness() {
+        this.fitness = calculateFitness();
     }
 
     public int getFitness() {
