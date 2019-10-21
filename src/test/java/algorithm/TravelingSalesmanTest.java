@@ -12,7 +12,7 @@ public class TravelingSalesmanTest {
 
     @Test
     public void crossoverTest() {
-        TravelingSalesman travelingSalesman = new TravelingSalesman(10,2, 0, 3);
+        TravelingSalesman travelingSalesman = new TravelingSalesman(10, 10, 2, 0, 3);
 
     }
 }

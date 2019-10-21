@@ -29,14 +29,15 @@ public class Main {
 
         int populationSize = 20;
         ArrayList<Genome> population = Lists.newArrayList();
+        int numberOfCities = cities.size();
         for (int i = 0; i < populationSize; i++) {
-            population.add(new Genome(startingCity,cities.size()));
+            population.add(new Genome(startingCity, numberOfCities));
         }
 
         int reproductionSize = 2;
         int tournamentSize = 3;
         int genomeSize = population.get(0).getRoute().size();
-        TravelingSalesman algorithm = new TravelingSalesman(genomeSize, reproductionSize, startingCity, tournamentSize);
+        TravelingSalesman algorithm = new TravelingSalesman(genomeSize, numberOfCities, reproductionSize, startingCity, tournamentSize);
 
         List<Genome> selection = algorithm.selection(population);
 

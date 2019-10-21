@@ -27,8 +27,9 @@ public class TravelingSalesman {
     private int targetFitness;
     private int tournamentSize;
 
-    public TravelingSalesman(int genomeSize, int reproductionSize, int startingCity, int tournamentSize) {
+    public TravelingSalesman(int genomeSize, int numberOfCities, int reproductionSize, int startingCity, int tournamentSize) {
         this.genomeSize = genomeSize;
+        this.numberOfCities = numberOfCities;
         this.reproductionSize = reproductionSize;
         this.startingCity = startingCity;
         this.tournamentSize = tournamentSize;
@@ -81,13 +82,24 @@ public class TravelingSalesman {
         }
 
         //TODO: change to check if present from HASHSET
-        for (int i = momRoute.size() - 1; i > 0; i--) {
+        for (int i = momRoute.size() - 1; i >= 0; i--) {
              if (childRoute.get(i) == -1){
-                 if (!childRoute.contains(momRoute.get(i))) {
-                     childRoute.set(i, momRoute.get(i));
+                 for (int k = momRoute.size() - 1; k >= 0; k--) {
+                     if (!childRoute.contains(momRoute.get(k))){
+                         childRoute.set(i, momRoute.get(k));
+                         break;
+                     }
                  }
              }
         }
+
+        System.out.println("DAD");
+        System.out.println(dadRoute);
+        System.out.println("MOM");
+        System.out.println(momRoute);
+        System.out.println("CHILD");
+        System.out.println(childRoute);
+
         Genome child = new Genome(childRoute, startingCity, numberOfCities);
         return Lists.newArrayList(child);
     }
