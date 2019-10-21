@@ -111,6 +111,14 @@ public class TravelingSalesman {
              }
         }
 
+//        printValuesOfCrossover(dadRoute, momRoute, childRoute, childRoute2);
+
+        Genome child = new Genome(childRoute, startingCity, numberOfCities);
+        Genome child2 = new Genome(childRoute2, startingCity, numberOfCities);
+        return Lists.newArrayList(child,child2);
+    }
+
+    private void printValuesOfCrossover(List<Integer> dadRoute, List<Integer> momRoute, List<Integer> childRoute, List<Integer> childRoute2) {
         System.out.println("DAD");
         System.out.println(dadRoute);
         System.out.println("MOM");
@@ -119,10 +127,24 @@ public class TravelingSalesman {
         System.out.println(childRoute);
         System.out.println("CHILD");
         System.out.println(childRoute2);
+    }
 
-        Genome child = new Genome(childRoute, startingCity, numberOfCities);
-        Genome child2 = new Genome(childRoute2, startingCity, numberOfCities);
-        return Lists.newArrayList(child,child2);
+    //TODO: mutation doesn't count fitness because it's counted in constructor and it's void here
+    private void swapMutation(Genome genome){
+        Random random = new Random();
+        List<Integer> route = genome.getRoute();
+        Collections.swap(route, random.nextInt(route.size()-1),random.nextInt(route.size()-1));
+    }
+
+    public List<Genome> swap(List<Genome> genomes){
+        genomes.forEach(this::swapMutation);
+        List<Genome> mutatedGenomes = new ArrayList<>();
+
+        for (Genome genome : genomes) {
+            Genome g = new Genome(genome.getRoute(), startingCity, numberOfCities);
+            mutatedGenomes.add(g);
+        }
+        return mutatedGenomes;
     }
 
 }
