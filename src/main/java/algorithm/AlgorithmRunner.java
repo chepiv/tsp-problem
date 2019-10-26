@@ -103,7 +103,7 @@ public class AlgorithmRunner {
             population = selectedAndCrossedPopulation;
         }
 
-        String filename = "results\\" + generations + "\\" + populationSize + "\\" + identifierOfTheRun + "_" + file.substring(file.lastIndexOf("/") + 1) + ".csv";
+        String filename = "results/" + generations + "/" + populationSize + "/" + identifierOfTheRun + "_" + file.substring(file.lastIndexOf("/") + 1) + ".csv";
 
         updateFileToFitnessMap(filename,csvResults.get(csvResults.size() -1).getBestResult(),csvResults);
 //        Plot plt = Plot.create();
@@ -117,21 +117,21 @@ public class AlgorithmRunner {
     }
 
     private void saveResultToFile(List<CsvResultLine> csvResults, String filename) throws Exception {
-        csvWriter.writeCsvFromBean(Paths.get("C:\\Users\\chepiv\\IdeaProjects\\tsp-problem\\" + filename), csvResults);
+        csvWriter.writeCsvFromBean(Paths.get(filename), csvResults);
     }
 
     private void updateFileToFitnessMap(String filename,Integer fitness, List<CsvResultLine> csvResults) throws Exception {
-        while (fileToFitness.size() < 5){
+        if (fileToFitness.size() < 5){
             fileToFitness.put(filename,fitness);
             saveResultToFile(csvResults,filename);
-        }
-
-        Map.Entry<String, Integer> min = Collections.min(fileToFitness.entrySet(), Comparator.comparingInt(Map.Entry::getValue));
-        if (fitness<min.getValue()) {
-            boolean delete = new File(filename).delete();
-            fileToFitness.remove(min.getKey());
-            saveResultToFile(csvResults,filename);
-            fileToFitness.put(filename,fitness);
+        }else {
+            Map.Entry<String, Integer> max = Collections.max(fileToFitness.entrySet(), Comparator.comparingInt(Map.Entry::getValue));
+            if (fitness<max.getValue()) {
+                boolean delete = new File(max.getKey()).delete();
+                fileToFitness.remove(max.getKey());
+                saveResultToFile(csvResults,filename);
+                fileToFitness.put(filename,fitness);
+            }
         }
     }
 
@@ -179,14 +179,13 @@ public class AlgorithmRunner {
     @Override
     public String toString() {
         return
-                "populationSize=" + populationSize +
+                " populationSize=" + populationSize +
                         ", generations=" + generations +
                         ", px=" + px +
                         ", pm=" + pm +
                         ", tournamentSize=" + tournamentSize +
                         ", mutationType=" + mutationType +
                         ", crossoverType=" + crossoverType +
-                        ", file='" + file + '\'' +
-                        '}';
+                        ", file='" + file + '\'';
     }
 }

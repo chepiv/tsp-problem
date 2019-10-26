@@ -6,7 +6,8 @@ import org.apache.commons.io.FileUtils;
 import utils.CsvWriter;
 
 import java.io.File;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by chepiv on 11/10/2019.
@@ -29,8 +30,6 @@ public class Main {
         String gr666 = "gr666";
         String kroA100 = "kroA100";
 //        String file = "data/berlin52.tsp";
-        List<String> configurations = new ArrayList<>();
-        configurations.add("dupa");
 
         Map<String,Integer> fileToFitness = new HashMap<>(5);
 
@@ -39,8 +38,8 @@ public class Main {
         String[] filesNamesMedium = {"data/kroA100.tsp", "data/kroA150.tsp", "data/kroA200.tsp"};
 
 
-        int i = 0;
         for (String fileName : filesNamesMedium) {
+            int i = 0;
             for (int generation : generations) {
                 for (int populationSize : populationSizes) {
                     for (double pm : pmRates) {
@@ -50,15 +49,16 @@ public class Main {
                                     tournamentSize =  (populationSize *10) /100;
                                     AlgorithmRunner algorithmRunner = new AlgorithmRunner(populationSize, generation, px, pm, tournamentSize, mutationType, crossoverType, fileName,i,fileToFitness);
                                     algorithmRunner.run();
-                                    configurations.add(i + algorithmRunner.toString());
+                                    String configuration = i + algorithmRunner.toString() + System.lineSeparator();
                                     i++;
+                                    FileUtils.write(new File("results/"+fileName+"_config.txt"),configuration,true);
                                 }
                             }
                         }
                     }
+                    fileToFitness.clear();
                 }
             }
-            FileUtils.writeLines(new File("results/"+fileName+"_config.txt"),configurations);
         }
     }
 }
