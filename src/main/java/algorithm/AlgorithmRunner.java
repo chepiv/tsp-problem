@@ -5,11 +5,9 @@ import model.City;
 import model.Genome;
 import utils.*;
 
+import java.io.File;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.OptionalDouble;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -32,11 +30,35 @@ public class AlgorithmRunner {
     String berlin52 = "berlin52";
     String gr666 = "gr666";
     String kroA100 = "kroA100";
-    String file = berlin52;
+    private String file = berlin52;
+    int identifierOfTheRun;
+    Map<String,Integer> fileToFitness;
+
+    public AlgorithmRunner(int populationSize,
+                           int generations,
+                           double px,
+                           double pm,
+                           int tournamentSize,
+                           MutationType mutationType,
+                           CrossoverType crossoverType,
+                           String file,
+                           int identifierOfTheRun,
+                           Map<String,Integer> fileToFitness) {
+        this.populationSize = populationSize;
+        this.generations = generations;
+        this.px = px;
+        this.pm = pm;
+        this.tournamentSize = tournamentSize;
+        this.mutationType = mutationType;
+        this.crossoverType = crossoverType;
+        this.file = file;
+        this.identifierOfTheRun = identifierOfTheRun;
+        this.fileToFitness = fileToFitness;
+    }
 
     public void run() throws Exception {
 
-        List<City> cities = DataParser.loadData("C:\\Users\\chepiv\\IdeaProjects\\tsp-problem\\data\\" + file+".tsp");
+        List<City> cities = DataParser.loadData(file);
 
         DistanceMatrix distanceMatrix = new DistanceMatrix(cities);
         distanceMatrix.calculateMatrix();
@@ -45,7 +67,7 @@ public class AlgorithmRunner {
 
         //GENERATING RANDOM FIRST POPULATION
 
-        List <Genome> population = Lists.newArrayList();
+        List<Genome> population = Lists.newArrayList();
         int numberOfCities = cities.size();
         for (int i = 0; i < populationSize; i++) {
             population.add(new Genome(startingCity, numberOfCities));
@@ -62,26 +84,28 @@ public class AlgorithmRunner {
 
         for (int i = 0; i < generations; i++) {
             List<Genome> selectedAndCrossedPopulation = fillPopulation(population);
-            mutatePopulation(selectedAndCrossedPopulation,mutationType);
+            mutatePopulation(selectedAndCrossedPopulation, mutationType);
             Genome bestGenome = Collections.min(selectedAndCrossedPopulation);
             Genome worthGenome = Collections.max(selectedAndCrossedPopulation);
             OptionalDouble averageGenome = selectedAndCrossedPopulation
                     .stream()
                     .mapToDouble(Genome::getFitness)
                     .average();
-            Double average = averageGenome.isPresent() ? averageGenome.getAsDouble(): null;
+            Double average = averageGenome.isPresent() ? averageGenome.getAsDouble() : null;
             System.out.println("BEST GENOME");
             System.out.println(bestGenome);
 
             generationsX.add(i);
             fitnesesY.add(bestGenome.getFitness());
 
-            csvResults.add(new CsvResultLine(i, bestGenome.getFitness(),average,worthGenome.getFitness()));
+            csvResults.add(new CsvResultLine(i, bestGenome.getFitness(), average, worthGenome.getFitness()));
 
             population = selectedAndCrossedPopulation;
         }
 
-        csvWriter.writeCsvFromBean(Paths.get("C:\\Users\\chepiv\\IdeaProjects\\tsp-problem\\results\\"+file+".csv"),csvResults);
+        String filename = "results\\" + generations + "\\" + populationSize + "\\" + identifierOfTheRun + "_" + file.substring(file.lastIndexOf("/") + 1) + ".csv";
+
+        updateFileToFitnessMap(filename,csvResults.get(csvResults.size() -1).getBestResult(),csvResults);
 //        Plot plt = Plot.create();
 //        plt.plot()
 //                .add(generationsX,fitnesesY)
@@ -92,19 +116,38 @@ public class AlgorithmRunner {
 
     }
 
-    private List<Genome> fillPopulation(List<Genome> population){
+    private void saveResultToFile(List<CsvResultLine> csvResults, String filename) throws Exception {
+        csvWriter.writeCsvFromBean(Paths.get("C:\\Users\\chepiv\\IdeaProjects\\tsp-problem\\" + filename), csvResults);
+    }
+
+    private void updateFileToFitnessMap(String filename,Integer fitness, List<CsvResultLine> csvResults) throws Exception {
+        while (fileToFitness.size() < 5){
+            fileToFitness.put(filename,fitness);
+            saveResultToFile(csvResults,filename);
+        }
+
+        Map.Entry<String, Integer> min = Collections.min(fileToFitness.entrySet(), Comparator.comparingInt(Map.Entry::getValue));
+        if (fitness<min.getValue()) {
+            boolean delete = new File(filename).delete();
+            fileToFitness.remove(min.getKey());
+            saveResultToFile(csvResults,filename);
+            fileToFitness.put(filename,fitness);
+        }
+    }
+
+    private List<Genome> fillPopulation(List<Genome> population) {
         System.out.println("SELECTION PROCESS HAS STARTED");
         List<Genome> newPopulation = new ArrayList<>();
         while (!isPopulationFilled(newPopulation)) {
             List<Genome> parents = algorithm.selection(population);
 
             double rand = ThreadLocalRandom.current().nextDouble(0, 1);
-            if (rand <= px){
+            if (rand <= px) {
                 System.out.println("CROSSOVER PROCESS HAS STARTED");
-                List<Genome> kids = crossover(parents,crossoverType);
+                List<Genome> kids = crossover(parents, crossoverType);
                 kids.forEach(System.out::println);
                 newPopulation.addAll(kids);
-            }else {
+            } else {
                 newPopulation.addAll(parents);
             }
         }
@@ -114,19 +157,36 @@ public class AlgorithmRunner {
     private List<Genome> crossover(List<Genome> population, CrossoverType crossoverType) {
         if (crossoverType == CrossoverType.OX) {
             return algorithm.orderedCrossover(population);
-        }
-        else return algorithm.pmxCrossover(population);
+        } else return algorithm.pmxCrossover(population);
     }
 
-    private void mutatePopulation (List<Genome> population, MutationType mutationType) {
-            System.out.println("MUTATION PROCESS HAS STARTED");
-            if (mutationType == MutationType.SWAP) {
-                algorithm.swap(population, pm);
-            }
-            else algorithm.inverse(population,pm);
+    private void mutatePopulation(List<Genome> population, MutationType mutationType) {
+        System.out.println("MUTATION PROCESS HAS STARTED");
+        if (mutationType == MutationType.SWAP) {
+            algorithm.swap(population, pm);
+        } else algorithm.inverse(population, pm);
     }
 
     private boolean isPopulationFilled(List<Genome> population) {
         return population.size() == populationSize;
+    }
+
+
+    private String configDescription() {
+        return toString();
+    }
+
+    @Override
+    public String toString() {
+        return
+                "populationSize=" + populationSize +
+                        ", generations=" + generations +
+                        ", px=" + px +
+                        ", pm=" + pm +
+                        ", tournamentSize=" + tournamentSize +
+                        ", mutationType=" + mutationType +
+                        ", crossoverType=" + crossoverType +
+                        ", file='" + file + '\'' +
+                        '}';
     }
 }

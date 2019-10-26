@@ -1,7 +1,6 @@
 package utils;
 
 import com.opencsv.bean.CsvBindByName;
-import com.opencsv.bean.CsvBindByPosition;
 
 /**
  * Created by chepiv on 25/10/2019.
@@ -17,14 +16,17 @@ public class CsvResultLine{
         this.worstResult = worstResult;
     }
 
-    @CsvBindByName(column = "First Name", required = true)
-    @CsvBindByPosition(position = 0)
+    @CsvBindByName(column = "generation", required = true)
+//    @CsvBindByPosition(position = 0)
     private int generation;
-    @CsvBindByPosition(position = 1)
+    @CsvBindByName(column = "worstResult", required = true)
+//    @CsvBindByPosition(position = 1)
     private Integer worstResult;
-    @CsvBindByPosition(position = 2)
+    @CsvBindByName(column = "averageResult", required = true)
+//    @CsvBindByPosition(position = 2)
     private Double averageResult;
-    @CsvBindByPosition(position = 3)
+    @CsvBindByName(column = "bestResult", required = true)
+//    @CsvBindByPosition(position = 3)
     private Integer bestResult;
 
     public Integer getBestResult() {

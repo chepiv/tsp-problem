@@ -6,6 +6,7 @@ import com.opencsv.bean.StatefulBeanToCsvBuilder;
 
 import java.io.FileWriter;
 import java.io.Writer;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
  */
 public class CsvWriter {
     public void writeCsvFromBean(Path path, List<CsvResultLine> results) throws Exception {
+        Files.createDirectories(path.getParent());
         Writer writer  = new FileWriter(path.toString());
 
         final CustomMappingStrategy<CsvResultLine> mappingStrategy = new CustomMappingStrategy<>();
