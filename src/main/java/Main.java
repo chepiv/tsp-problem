@@ -1,7 +1,4 @@
 import algorithm.AlgorithmRunner;
-import com.github.sh0nk.matplotlib4j.PythonExecutionException;
-
-import java.io.IOException;
 
 /**
  * Created by chepiv on 11/10/2019.
@@ -9,7 +6,7 @@ import java.io.IOException;
  * Github:chepiv
  */
 public class Main {
-    public static void main(String[] args) throws IOException, PythonExecutionException {
+    public static void main(String[] args) throws Exception {
         AlgorithmRunner algorithmRunner = new AlgorithmRunner();
         algorithmRunner.run();
     }
