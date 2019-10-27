@@ -1,4 +1,4 @@
-package utils;
+package com.chepiv.utils;
 
 /**
  * Created by chepiv on 11/10/2019.

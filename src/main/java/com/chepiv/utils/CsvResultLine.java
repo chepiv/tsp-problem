@@ -1,4 +1,4 @@
-package utils;
+package com.chepiv.utils;
 
 import com.opencsv.bean.CsvBindByName;
 

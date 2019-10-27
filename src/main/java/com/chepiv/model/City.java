@@ -1,4 +1,4 @@
-package model;
+package com.chepiv.model;
 
 /**
  * Created by chepiv on 08/10/2019.

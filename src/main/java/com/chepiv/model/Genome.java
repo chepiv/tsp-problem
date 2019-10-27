@@ -1,6 +1,6 @@
-package model;
+package com.chepiv.model;
 
-import utils.MatrixSingleton;
+import com.chepiv.utils.MatrixSingleton;
 
 import java.util.ArrayList;
 import java.util.Collections;

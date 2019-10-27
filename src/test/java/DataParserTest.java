@@ -1,8 +1,8 @@
-import model.City;
-import model.Genome;
+import com.chepiv.model.City;
+import com.chepiv.model.Genome;
 import org.junit.Test;
-import utils.DataParser;
-import utils.DistanceMatrix;
+import com.chepiv.utils.DataParser;
+import com.chepiv.utils.DistanceMatrix;
 
 import java.io.IOException;
 import java.util.List;

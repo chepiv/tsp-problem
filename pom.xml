@@ -19,6 +19,18 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>com.chepiv.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
                     <execution>
@@ -30,13 +42,13 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-
+                                        com.chepiv.Main
                                     </mainClass>
                                 </manifest>
                             </archive>
-                            <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
+                            <descriptors>
+                                <descriptor>descriptor.xml</descriptor>
+                            </descriptors>
                         </configuration>
                     </execution>
                 </executions>
@@ -89,7 +101,6 @@
 
 
     </dependencies>
-
 
 
 </project>

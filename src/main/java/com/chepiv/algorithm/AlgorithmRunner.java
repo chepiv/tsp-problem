@@ -1,9 +1,9 @@
-package algorithm;
+package com.chepiv.algorithm;
 
 import com.google.common.collect.Lists;
-import model.City;
-import model.Genome;
-import utils.*;
+import com.chepiv.model.City;
+import com.chepiv.model.Genome;
+import com.chepiv.utils.*;
 
 import java.io.File;
 import java.nio.file.Paths;

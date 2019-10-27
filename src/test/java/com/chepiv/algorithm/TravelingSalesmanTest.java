@@ -1,4 +1,4 @@
-package algorithm;
+package com.chepiv.algorithm;
 
 import org.junit.Test;
 

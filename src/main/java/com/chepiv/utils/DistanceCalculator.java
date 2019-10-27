@@ -1,6 +1,6 @@
-package utils;
+package com.chepiv.utils;
 
-import model.City;
+import com.chepiv.model.City;
 
 /**
  * Created by chepiv on 11/10/2019.

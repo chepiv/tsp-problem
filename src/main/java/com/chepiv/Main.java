@@ -1,9 +1,11 @@
-import algorithm.AlgorithmRunner;
-import algorithm.CrossoverType;
-import algorithm.MutationType;
-import algorithm.TravelingSalesman;
+package com.chepiv;
+
+import com.chepiv.algorithm.AlgorithmRunner;
+import com.chepiv.algorithm.CrossoverType;
+import com.chepiv.algorithm.MutationType;
+import com.chepiv.algorithm.TravelingSalesman;
 import org.apache.commons.io.FileUtils;
-import utils.CsvWriter;
+import com.chepiv.utils.CsvWriter;
 
 import java.io.File;
 import java.util.HashMap;
@@ -17,10 +19,10 @@ import java.util.Map;
 public class Main {
     public static void main(String[] args) throws Exception {
         TravelingSalesman algorithm;
-        int[] generations = {500, 1000};
-        int[] populationSizes = {100, 500, 1000};
-        double[] pxRates = {0.5, 0.7, 1.0};
-        double[] pmRates = {0.1, 0.15, 0.35};
+        int[] generations = {1000};
+        int[] populationSizes = {100,1000};
+        double[] pxRates = {0.5, 1.0};
+        double[] pmRates = {0.1, 0.35};
         int startingCity = 0;
         int tournamentSize = 0;
         MutationType[] mutationTypes = {MutationType.SWAP, MutationType.INVERSE};
@@ -35,7 +37,7 @@ public class Main {
 
 
         String[] filesNamesEasy = {"berlin11_modified.tsp", "berlin52.tsp"};
-        String[] filesNamesMedium = {"data/kroA100.tsp", "data/kroA150.tsp", "data/kroA200.tsp"};
+        String[] filesNamesMedium = {"data/kroA200.tsp"}; //remove 100, 150 for 500
 
 
         for (String fileName : filesNamesMedium) {

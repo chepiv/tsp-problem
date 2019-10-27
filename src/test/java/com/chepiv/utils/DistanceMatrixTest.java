@@ -1,7 +1,7 @@
-package utils;
+package com.chepiv.utils;
 
 import com.google.common.collect.Lists;
-import model.City;
+import com.chepiv.model.City;
 import org.junit.Before;
 import org.junit.Test;
 

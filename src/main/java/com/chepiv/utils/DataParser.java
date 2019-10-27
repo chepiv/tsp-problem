@@ -1,6 +1,6 @@
-package utils;
+package com.chepiv.utils;
 
-import model.City;
+import com.chepiv.model.City;
 
 import java.io.BufferedReader;
 import java.io.File;

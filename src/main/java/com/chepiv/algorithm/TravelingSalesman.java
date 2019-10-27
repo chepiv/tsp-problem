@@ -1,7 +1,7 @@
-package algorithm;
+package com.chepiv.algorithm;
 
 import com.google.common.collect.Lists;
-import model.Genome;
+import com.chepiv.model.Genome;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
