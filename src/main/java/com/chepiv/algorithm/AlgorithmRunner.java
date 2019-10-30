@@ -17,7 +17,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class AlgorithmRunner {
 
-    private TravelingSalesman algorithm;
+    private GeneticAlgorithm algorithm;
     private int populationSize = 100;
     private int generations = 100;
     private int startingCity = 0;
@@ -76,7 +76,7 @@ public class AlgorithmRunner {
         int reproductionSize = 2;
 
         int genomeSize = population.get(0).getRoute().size();
-        algorithm = new TravelingSalesman(genomeSize, numberOfCities, reproductionSize, startingCity, tournamentSize);
+        algorithm = new GeneticAlgorithm(genomeSize, numberOfCities, reproductionSize, startingCity, tournamentSize);
 
         List<Integer> generationsX = Lists.newArrayList();
         List<Integer> fitnesesY = Lists.newArrayList();

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  * Contact: chepurin.ivan@gmail.com
  * Github:chepiv
  */
-public class TravelingSalesman {
+public class GeneticAlgorithm {
 
     private int generationSize;
     private int genomeSize;
@@ -28,7 +28,7 @@ public class TravelingSalesman {
     private int targetFitness;
     private int tournamentSize;
 
-    public TravelingSalesman(int genomeSize, int numberOfCities, int reproductionSize, int startingCity, int tournamentSize) {
+    public GeneticAlgorithm(int genomeSize, int numberOfCities, int reproductionSize, int startingCity, int tournamentSize) {
         this.genomeSize = genomeSize;
         this.numberOfCities = numberOfCities;
         this.reproductionSize = reproductionSize;

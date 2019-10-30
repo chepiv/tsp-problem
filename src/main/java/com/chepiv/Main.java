@@ -3,7 +3,7 @@ package com.chepiv;
 import com.chepiv.algorithm.AlgorithmRunner;
 import com.chepiv.algorithm.CrossoverType;
 import com.chepiv.algorithm.MutationType;
-import com.chepiv.algorithm.TravelingSalesman;
+import com.chepiv.algorithm.GeneticAlgorithm;
 import org.apache.commons.io.FileUtils;
 import com.chepiv.utils.CsvWriter;
 
@@ -18,7 +18,7 @@ import java.util.Map;
  */
 public class Main {
     public static void main(String[] args) throws Exception {
-        TravelingSalesman algorithm;
+        GeneticAlgorithm algorithm;
         int[] generations = {1000};
         int[] populationSizes = {100,1000};
         double[] pxRates = {0.5, 1.0};

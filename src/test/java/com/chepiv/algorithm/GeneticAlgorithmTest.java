@@ -7,12 +7,12 @@ import org.junit.Test;
  * Contact: chepurin.ivan@gmail.com
  * Github:chepiv
  */
-public class TravelingSalesmanTest {
+public class GeneticAlgorithmTest {
 
 
     @Test
     public void crossoverTest() {
-        TravelingSalesman travelingSalesman = new TravelingSalesman(10, 10, 2, 0, 3);
+        GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(10, 10, 2, 0, 3);
 
     }
 }
