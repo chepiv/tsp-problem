@@ -24,6 +24,10 @@ public class TabuList {
         }
     }
 
+    public boolean contains(Genome genome) {
+        return tabuList.contains(genome);
+    }
+
     public List<Genome> getTabuList(){
         return tabuList;
     }
