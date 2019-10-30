@@ -1,6 +1,7 @@
 package com.chepiv.model;
 
 import com.chepiv.utils.MatrixSingleton;
+import com.google.common.annotations.VisibleForTesting;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,6 +37,14 @@ public class Genome implements Comparable<Genome>{
         distances = MatrixSingleton.getInstance().getDistances();
         this.route = randomSalesman();
         this.fitness = calculateFitness();
+    }
+
+    @VisibleForTesting
+    Genome(List<Integer> route, int startingCity, int numberOfCities, double[][] distances) {
+        this.route = route;
+        this.startingCity = startingCity;
+        this.numberOfCities = numberOfCities;
+        this.distances = distances;
     }
 
     private List<Integer> randomSalesman() {

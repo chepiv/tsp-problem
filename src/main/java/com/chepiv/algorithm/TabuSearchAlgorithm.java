@@ -5,21 +5,19 @@ import com.chepiv.model.Genome;
 import com.chepiv.model.TabuList;
 import com.chepiv.utils.DataParser;
 import com.chepiv.utils.DistanceMatrix;
-import com.github.sh0nk.matplotlib4j.Plot;
 import com.github.sh0nk.matplotlib4j.PythonExecutionException;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by chepiv on 30/10/2019.
  * Contact: chepurin.ivan@gmail.com
  * Github:chepiv
  */
-public class TabuSearch {
+public class TabuSearchAlgorithm implements Algorithm {
     private int tabuListSize;
     private TabuList tabuList;
     private int numOfNeighbours;
@@ -27,9 +25,9 @@ public class TabuSearch {
     private String fileName;
     private int startingCity;
 
-    public TabuSearch(int tabuListSize,
-                      int numOfNeighbours,
-                      int maxIterations, String fileName, int startingCity) {
+    public TabuSearchAlgorithm(int tabuListSize,
+                               int numOfNeighbours,
+                               int maxIterations, String fileName, int startingCity) {
         this.tabuListSize = tabuListSize;
         this.tabuList = new TabuList(tabuListSize);
         this.numOfNeighbours = numOfNeighbours;
@@ -48,7 +46,7 @@ public class TabuSearch {
         int i = 0;
 
         int currentMaxIterations = 0;
-        Genome best = getRandomIndividual(cities);
+        Genome best = getRandomIndividual(startingCity,cities);
         while (currentMaxIterations < maxIterations) {
             tabuList.add(best);
             List<Genome> neighbours = getNeighbours(best, numberOfCities);
@@ -65,17 +63,10 @@ public class TabuSearch {
                 currentMaxIterations++;
             }
         }
-        Plot plt = Plot.create();
-        plt.plot()
-                .add(generationsHistory, bestFitnessesHistory)
-                .linestyle("--");
-
-        plt.show();
+        drawPlot(bestFitnessesHistory,generationsHistory);
     }
 
-    private Genome getRandomIndividual(List<City> cities) {
-        return new Genome(startingCity, cities.size());
-    }
+
 
     private List<Genome> getNeighbours(Genome genome, int numberOfCities) {
         List<Genome> neighbours = new ArrayList<>();
@@ -83,13 +74,6 @@ public class TabuSearch {
             neighbours.add(getNeighbour(genome, numberOfCities));
         }
         return neighbours;
-    }
-
-    private Genome getNeighbour(Genome genome, int numberOfCities) {
-        Random random = new Random();
-        List<Integer> route = new ArrayList<>(genome.getRoute());
-        Collections.swap(route, random.nextInt(route.size() - 1), random.nextInt(route.size() - 1));
-        return new Genome(route, startingCity, numberOfCities);
     }
 
     private Genome getBestNeighbour(List<Genome> neighbours) {
