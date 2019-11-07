@@ -1,9 +1,6 @@
 package com.chepiv;
 
 import com.chepiv.algorithm.SimulatedAnnealing;
-import com.github.sh0nk.matplotlib4j.PythonExecutionException;
-
-import java.io.IOException;
 
 /**
  * Created by chepiv on 30/10/2019.
@@ -11,12 +8,14 @@ import java.io.IOException;
  * Github:chepiv
  */
 public class SAMain {
-    public static void main(String[] args) throws IOException, PythonExecutionException {
-        double temperature = 100000;
-        double coolingRate = 0.00003;
+    public static void main(String[] args) throws Exception {
+        double temperature = 1500;
+        double coolingRate = 0.9995;
         int startingCity = 0;
-        String fileName = "data/kroA100.tsp";
-        SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(fileName,temperature,0,coolingRate);
+        String fileName = "data/berlin52.tsp";
+        int numOfNeighbours = 5;
+        int maxNumOfIterations = 1000;
+        SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(fileName,temperature, maxNumOfIterations, numOfNeighbours, coolingRate);
         simulatedAnnealing.run();
     }
 }

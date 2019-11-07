@@ -27,7 +27,7 @@ public class Genome implements Comparable<Genome>{
         this.numberOfCities = numberOfCities;
         this.startingCity = startingCity;
         distances = MatrixSingleton.getInstance().getDistances();
-        this.route = route;
+        this.route = new ArrayList<>(route);
         this.fitness = calculateFitness();
     }
 

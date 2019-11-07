@@ -15,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * Contact: chepurin.ivan@gmail.com
  * Github:chepiv
  */
-public class AlgorithmRunner {
+public class GeneticAlgorithmRunner {
 
     private GeneticAlgorithm algorithm;
     private int populationSize = 100;
@@ -34,16 +34,16 @@ public class AlgorithmRunner {
     int identifierOfTheRun;
     Map<String,Integer> fileToFitness;
 
-    public AlgorithmRunner(int populationSize,
-                           int generations,
-                           double px,
-                           double pm,
-                           int tournamentSize,
-                           MutationType mutationType,
-                           CrossoverType crossoverType,
-                           String file,
-                           int identifierOfTheRun,
-                           Map<String,Integer> fileToFitness) {
+    public GeneticAlgorithmRunner(int populationSize,
+                                  int generations,
+                                  double px,
+                                  double pm,
+                                  int tournamentSize,
+                                  MutationType mutationType,
+                                  CrossoverType crossoverType,
+                                  String file,
+                                  int identifierOfTheRun,
+                                  Map<String,Integer> fileToFitness) {
         this.populationSize = populationSize;
         this.generations = generations;
         this.px = px;
@@ -98,7 +98,7 @@ public class AlgorithmRunner {
             generationsX.add(i);
             fitnesesY.add(bestGenome.getFitness());
 
-            csvResults.add(new CsvResultLine(i, bestGenome.getFitness(), average, worthGenome.getFitness()));
+            csvResults.add(new CsvResultLine(i, worthGenome.getFitness(), average, bestGenome.getFitness()));
 
             population = selectedAndCrossedPopulation;
         }
@@ -106,12 +106,6 @@ public class AlgorithmRunner {
         String filename = "results/" + generations + "/" + populationSize + "/" + identifierOfTheRun + "_" + file.substring(file.lastIndexOf("/") + 1) + ".csv";
 
         updateFileToFitnessMap(filename,csvResults.get(csvResults.size() -1).getBestResult(),csvResults);
-//        Plot plt = Plot.create();
-//        plt.plot()
-//                .add(generationsX,fitnesesY)
-//                .linestyle("--");
-//
-//        plt.show();
 
 
     }

@@ -22,7 +22,7 @@ public interface Algorithm {
 
     int startingCity = 0;
 
-    void run() throws IOException, PythonExecutionException;
+    void run() throws Exception;
 
     default Genome getRandomIndividual(int startingCity, List<City> cities) {
         return new Genome(startingCity, cities.size());

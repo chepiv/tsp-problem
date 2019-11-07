@@ -1,6 +1,6 @@
 package com.chepiv;
 
-import com.chepiv.algorithm.AlgorithmRunner;
+import com.chepiv.algorithm.GeneticAlgorithmRunner;
 import com.chepiv.algorithm.CrossoverType;
 import com.chepiv.algorithm.MutationType;
 import com.chepiv.algorithm.GeneticAlgorithm;
@@ -49,7 +49,7 @@ public class Main {
                             for (CrossoverType crossoverType : crossoverTypes) {
                                 for (MutationType mutationType : mutationTypes) {
                                     tournamentSize =  (populationSize *10) /100;
-                                    AlgorithmRunner algorithmRunner = new AlgorithmRunner(populationSize, generation, px, pm, tournamentSize, mutationType, crossoverType, fileName,i,fileToFitness);
+                                    GeneticAlgorithmRunner algorithmRunner = new GeneticAlgorithmRunner(populationSize, generation, px, pm, tournamentSize, mutationType, crossoverType, fileName,i,fileToFitness);
                                     algorithmRunner.run();
                                     String configuration = i + algorithmRunner.toString() + System.lineSeparator();
                                     i++;

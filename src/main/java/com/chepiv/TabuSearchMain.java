@@ -1,9 +1,6 @@
 package com.chepiv;
 
 import com.chepiv.algorithm.TabuSearchAlgorithm;
-import com.github.sh0nk.matplotlib4j.PythonExecutionException;
-
-import java.io.IOException;
 
 /**
  * Created by chepiv on 30/10/2019.
@@ -11,11 +8,11 @@ import java.io.IOException;
  * Github:chepiv
  */
 public class TabuSearchMain {
-    public static void main(String[] args) throws IOException, PythonExecutionException {
-        int tabuListSize = 200;
-        int numOfNeighbours = 3000;
+    public static void main(String[] args) throws Exception {
+        int tabuListSize = 10;
+        int numOfNeighbours = 20;
         int maxIterations = 2000;
-        String fileName = "data/kroA100.tsp";
+        String fileName = "data/berlin52.tsp";
         int startingCity = 0;
         TabuSearchAlgorithm tabuSearchAlgorithm = new TabuSearchAlgorithm(tabuListSize, numOfNeighbours, maxIterations, fileName, startingCity);
         tabuSearchAlgorithm.run();

@@ -22,7 +22,9 @@ public class CsvWriter {
 
         final CustomMappingStrategy<CsvResultLine> mappingStrategy = new CustomMappingStrategy<>();
         mappingStrategy.setType(CsvResultLine.class);
+
         StatefulBeanToCsv sbc = new StatefulBeanToCsvBuilder(writer)
+                .withMappingStrategy(mappingStrategy)
                 .withSeparator(CSVWriter.DEFAULT_SEPARATOR)
                 .build();
 
