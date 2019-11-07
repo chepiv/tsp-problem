@@ -41,46 +41,48 @@ public class SimulatedAnnealing implements Algorithm {
     @Override
     public void run() throws Exception {
         List<Integer> bestFitnessesHistory = new ArrayList<>();
+        List<Integer> candidateHistory = new ArrayList<>();
         List<Integer> generationsHistory = new ArrayList<>();
-        List<Integer> bestCandidateHistory = new ArrayList<>();
-        List<Integer> worstNeighboursHistory = new ArrayList<>();
         int i = 0;
-        int maxTries = 0;
         List<City> cities = getCities(filename);
         int numberOfCities = cities.size();
-        Genome bestIndividual = getRandomIndividual(startingCity, cities);
-        Genome candidate = new Genome(bestIndividual.getRoute(), startingCity, numberOfCities);
+        Genome candidate = getRandomIndividual(startingCity, cities);
+        Genome bestIndividual = new Genome(candidate.getRoute(), startingCity, numberOfCities);
 
-        while (temperature > 1 && maxTries < maxNumOfIterations) {
-            List<Genome> neighbours = getNeighbours(bestIndividual, numberOfCities);
-            Genome neighbour = getBestNeighbour(neighbours);
-            Genome worstNeighbour = getWorstNeighbour(neighbours);
-
-            int currentBestFitness = bestIndividual.getFitness();
+        while (temperature > 1) {
+            Genome neighbour = getNeighbour(candidate, numberOfCities);
+            int currentBestFitness = candidate.getFitness();
             int neighbourFitness = neighbour.getFitness();
-            bestCandidateHistory.add(candidate.getFitness());
-            worstNeighboursHistory.add(worstNeighbour.getFitness());
-
-            if (candidate.getFitness() < bestIndividual.getFitness()) {
-                bestIndividual = new Genome(candidate.getRoute(), startingCity, numberOfCities);
-            } else if (isSolutionAccepted(currentBestFitness, neighbourFitness)) {
+            if (isSolutionAccepted(currentBestFitness, neighbourFitness)) {
                 candidate = new Genome(neighbour.getRoute(), startingCity, numberOfCities);
-            } else maxTries++;
-
-
-            temperature = temperature * coolingRate; // temp goes to fast
+            }
+            if (candidate.getFitness() < bestIndividual.getFitness()) {
+                bestIndividual = candidate; // try to use new
+            }
+            temperature *= coolingRate;
             generationsHistory.add(i++);
+            candidateHistory.add(candidate.getFitness());
             bestFitnessesHistory.add(bestIndividual.getFitness());
             System.out.println("Final solution distance: " + bestIndividual.getFitness());
             System.out.println("Tour: " + bestIndividual);
-            csvResults.add(new CsvResultLine(i, worstNeighbour.getFitness(), (double) candidate.getFitness(), currentBestFitness, temperature));
         }
+
+
+        generationsHistory.add(i++);
+        bestFitnessesHistory.add(bestIndividual.getFitness());
+        System.out.println("Final solution distance: " + bestIndividual.getFitness());
+        System.out.println("Tour: " + bestIndividual);
+        csvResults.add(new CsvResultLine(i, 0, (double) candidate.getFitness(), bestIndividual.getFitness(), temperature));
+
+        drawChart(candidateHistory, bestFitnessesHistory, generationsHistory);
+    }
 //        draw();
 
-//        drawPlot(bestFitnessesHistory, generationsHistory);
+    //        drawPlot(bestFitnessesHistory, generationsHistory);
 //        drawPlot(bestCandidateHistory, generationsHistory);
-        drawChart(bestCandidateHistory,bestFitnessesHistory,generationsHistory);
-    }
+
+
+
 
     private void drawChart(List<Integer> candidates, List<Integer> bestInds, List<Integer> generations) {
         try {
