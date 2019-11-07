@@ -14,7 +14,7 @@ public class SAMain {
         int startingCity = 0;
         String fileName = "data/berlin52.tsp";
         int numOfNeighbours = 5;
-        int maxNumOfIterations = 1000;
+        int maxNumOfIterations = 3000;
         SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(fileName,temperature, maxNumOfIterations, numOfNeighbours, coolingRate);
         simulatedAnnealing.run();
     }

@@ -4,7 +4,9 @@ import com.chepiv.model.City;
 import com.chepiv.model.Genome;
 import com.chepiv.utils.CsvResultLine;
 import com.chepiv.utils.CsvWriter;
+import org.knowm.xchart.*;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,28 +45,27 @@ public class SimulatedAnnealing implements Algorithm {
         List<Integer> bestCandidateHistory = new ArrayList<>();
         List<Integer> worstNeighboursHistory = new ArrayList<>();
         int i = 0;
+        int maxTries = 0;
         List<City> cities = getCities(filename);
         int numberOfCities = cities.size();
         Genome bestIndividual = getRandomIndividual(startingCity, cities);
         Genome candidate = new Genome(bestIndividual.getRoute(), startingCity, numberOfCities);
 
-        while (temperature > 1 && i<maxNumOfIterations) {
-            List<Genome> neighbours = getNeighbours(candidate, numberOfCities);
+        while (temperature > 1 && maxTries < maxNumOfIterations) {
+            List<Genome> neighbours = getNeighbours(bestIndividual, numberOfCities);
             Genome neighbour = getBestNeighbour(neighbours);
             Genome worstNeighbour = getWorstNeighbour(neighbours);
 
             int currentBestFitness = bestIndividual.getFitness();
             int neighbourFitness = neighbour.getFitness();
-            bestCandidateHistory.add(neighbourFitness);
+            bestCandidateHistory.add(candidate.getFitness());
             worstNeighboursHistory.add(worstNeighbour.getFitness());
-
-            if (isSolutionAccepted(currentBestFitness, neighbourFitness)) {
-                candidate = new Genome(neighbour.getRoute(), startingCity, numberOfCities);
-            }
 
             if (candidate.getFitness() < bestIndividual.getFitness()) {
                 bestIndividual = new Genome(candidate.getRoute(), startingCity, numberOfCities);
-            }
+            } else if (isSolutionAccepted(currentBestFitness, neighbourFitness)) {
+                candidate = new Genome(neighbour.getRoute(), startingCity, numberOfCities);
+            } else maxTries++;
 
 
             temperature = temperature * coolingRate; // temp goes to fast
@@ -74,9 +75,33 @@ public class SimulatedAnnealing implements Algorithm {
             System.out.println("Tour: " + bestIndividual);
             csvResults.add(new CsvResultLine(i, worstNeighbour.getFitness(), (double) candidate.getFitness(), currentBestFitness, temperature));
         }
-        draw();
+//        draw();
 
-//        drawPlot(bestFitnessesHistory,generationsHistory);
+//        drawPlot(bestFitnessesHistory, generationsHistory);
+//        drawPlot(bestCandidateHistory, generationsHistory);
+        drawChart(bestCandidateHistory,bestFitnessesHistory,generationsHistory);
+    }
+
+    private void drawChart(List<Integer> candidates, List<Integer> bestInds, List<Integer> generations) {
+        try {
+            double[] xData = new double[]{0.0, 1.0, 2.0};
+            double[] yData = new double[]{2.0, 1.0, 0.0};
+
+// Create Chart
+            XYChart chart = new XYChartBuilder().width(600).height(400).title("Area Chart").xAxisTitle("X").yAxisTitle("Y").build();
+            chart.addSeries("candidates",candidates).setXYSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
+            chart.addSeries("bestInds",bestInds).setXYSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
+// Show it
+            new SwingWrapper(chart).displayChart();
+
+// Save it
+            BitmapEncoder.saveBitmap(chart, "./Sample_Chart", BitmapEncoder.BitmapFormat.PNG);
+
+// or save it in high-res
+            BitmapEncoder.saveBitmapWithDPI(chart, "./Sample_Chart_300_DPI", BitmapEncoder.BitmapFormat.PNG, 300);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean isSolutionAccepted(int currentBestFitness, int candidateFitness) {
@@ -94,7 +119,7 @@ public class SimulatedAnnealing implements Algorithm {
         }
         double exp = Math.exp((currentBestFitness - candidateFitness) / temperature);
         double ap = Math.pow(Math.E,
-                (currentBestFitness - candidateFitness)/temperature);
+                (currentBestFitness - candidateFitness) / temperature);
         return exp;
     }
 
