@@ -4,7 +4,11 @@ import com.chepiv.model.City;
 import com.chepiv.model.Genome;
 import com.chepiv.utils.CsvResultLine;
 import com.chepiv.utils.CsvWriter;
-import org.knowm.xchart.*;
+import org.knowm.xchart.BitmapEncoder;
+import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.XYChart;
+import org.knowm.xchart.XYChartBuilder;
+import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -51,6 +55,7 @@ public class SimulatedAnnealing implements Algorithm {
 
         while (temperature > 1) {
             Genome neighbour = getNeighbour(candidate, numberOfCities);
+//            Genome neighbour = getBestNeighbour(getNeighbours(candidate,numberOfCities));
             int currentBestFitness = candidate.getFitness();
             int neighbourFitness = neighbour.getFitness();
             if (isSolutionAccepted(currentBestFitness, neighbourFitness)) {
@@ -65,6 +70,7 @@ public class SimulatedAnnealing implements Algorithm {
             bestFitnessesHistory.add(bestIndividual.getFitness());
             System.out.println("Final solution distance: " + bestIndividual.getFitness());
             System.out.println("Tour: " + bestIndividual);
+            csvResults.add(new CsvResultLine(i, 0, (double) candidate.getFitness(), bestIndividual.getFitness(), temperature));
         }
 
 
@@ -72,11 +78,12 @@ public class SimulatedAnnealing implements Algorithm {
         bestFitnessesHistory.add(bestIndividual.getFitness());
         System.out.println("Final solution distance: " + bestIndividual.getFitness());
         System.out.println("Tour: " + bestIndividual);
-        csvResults.add(new CsvResultLine(i, 0, (double) candidate.getFitness(), bestIndividual.getFitness(), temperature));
+
 
         drawChart(candidateHistory, bestFitnessesHistory, generationsHistory);
+        draw();
     }
-//        draw();
+
 
     //        drawPlot(bestFitnessesHistory, generationsHistory);
 //        drawPlot(bestCandidateHistory, generationsHistory);
@@ -91,8 +98,8 @@ public class SimulatedAnnealing implements Algorithm {
 
 // Create Chart
             XYChart chart = new XYChartBuilder().width(600).height(400).title("Area Chart").xAxisTitle("X").yAxisTitle("Y").build();
-            chart.addSeries("candidates",candidates).setXYSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
-            chart.addSeries("bestInds",bestInds).setXYSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
+            chart.addSeries("candidates",candidates).setMarker(SeriesMarkers.NONE);
+            chart.addSeries("bestInds",bestInds).setMarker(SeriesMarkers.NONE);
 // Show it
             new SwingWrapper(chart).displayChart();
 

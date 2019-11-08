@@ -13,7 +13,7 @@ public class SAMain {
         double coolingRate = 0.9995;
         int startingCity = 0;
         String fileName = "data/berlin52.tsp";
-        int numOfNeighbours = 5;
+        int numOfNeighbours = 3;
         int maxNumOfIterations = 3000;
         SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(fileName,temperature, maxNumOfIterations, numOfNeighbours, coolingRate);
         simulatedAnnealing.run();
