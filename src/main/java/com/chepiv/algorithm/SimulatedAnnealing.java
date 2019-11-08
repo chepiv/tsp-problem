@@ -4,13 +4,7 @@ import com.chepiv.model.City;
 import com.chepiv.model.Genome;
 import com.chepiv.utils.CsvResultLine;
 import com.chepiv.utils.CsvWriter;
-import org.knowm.xchart.BitmapEncoder;
-import org.knowm.xchart.SwingWrapper;
-import org.knowm.xchart.XYChart;
-import org.knowm.xchart.XYChartBuilder;
-import org.knowm.xchart.style.markers.SeriesMarkers;
 
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -80,7 +74,7 @@ public class SimulatedAnnealing implements Algorithm {
         System.out.println("Tour: " + bestIndividual);
 
 
-        drawChart(candidateHistory, bestFitnessesHistory, generationsHistory);
+        drawChart(candidateHistory, bestFitnessesHistory, null, null);
         draw();
     }
 
@@ -88,30 +82,6 @@ public class SimulatedAnnealing implements Algorithm {
     //        drawPlot(bestFitnessesHistory, generationsHistory);
 //        drawPlot(bestCandidateHistory, generationsHistory);
 
-
-
-
-    private void drawChart(List<Integer> candidates, List<Integer> bestInds, List<Integer> generations) {
-        try {
-            double[] xData = new double[]{0.0, 1.0, 2.0};
-            double[] yData = new double[]{2.0, 1.0, 0.0};
-
-// Create Chart
-            XYChart chart = new XYChartBuilder().width(600).height(400).title("Area Chart").xAxisTitle("X").yAxisTitle("Y").build();
-            chart.addSeries("candidates",candidates).setMarker(SeriesMarkers.NONE);
-            chart.addSeries("bestInds",bestInds).setMarker(SeriesMarkers.NONE);
-// Show it
-            new SwingWrapper(chart).displayChart();
-
-// Save it
-            BitmapEncoder.saveBitmap(chart, "./Sample_Chart", BitmapEncoder.BitmapFormat.PNG);
-
-// or save it in high-res
-            BitmapEncoder.saveBitmapWithDPI(chart, "./Sample_Chart_300_DPI", BitmapEncoder.BitmapFormat.PNG, 300);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private boolean isSolutionAccepted(int currentBestFitness, int candidateFitness) {
         double rand = ThreadLocalRandom.current().nextDouble(0, 1);

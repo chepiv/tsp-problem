@@ -27,8 +27,17 @@ public class Genome implements Comparable<Genome>{
         this.numberOfCities = numberOfCities;
         this.startingCity = startingCity;
         distances = MatrixSingleton.getInstance().getDistances();
-        this.route = new ArrayList<>(route);
+//        this.route = route.stream().map(Integer::new).collect(Collectors.toList());
+        this.route = deepCopy(route);
         this.fitness = calculateFitness();
+    }
+
+    private List<Integer> deepCopy(List<Integer> route) {
+        List<Integer> result = new ArrayList<>();
+        for (Integer integer : route) {
+            result.add(new Integer(integer));
+        }
+        return result;
     }
 
     public Genome(int startingCity, int numberOfCities) {

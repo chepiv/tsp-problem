@@ -15,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * Contact: chepurin.ivan@gmail.com
  * Github:chepiv
  */
-public class GeneticAlgorithmRunner {
+public class GeneticAlgorithmRunner implements Algorithm{
 
     private GeneticAlgorithm algorithm;
     private int populationSize = 100;
@@ -79,7 +79,9 @@ public class GeneticAlgorithmRunner {
         algorithm = new GeneticAlgorithm(genomeSize, numberOfCities, reproductionSize, startingCity, tournamentSize);
 
         List<Integer> generationsX = Lists.newArrayList();
-        List<Integer> fitnesesY = Lists.newArrayList();
+        List<Integer> bestIndividuals = Lists.newArrayList();
+        List<Double> averageIndividuals = Lists.newArrayList();
+        List<Integer> worstIndividuals = Lists.newArrayList();
         List<CsvResultLine> csvResults = Lists.newArrayList();
 
         for (int i = 0; i < generations; i++) {
@@ -96,7 +98,9 @@ public class GeneticAlgorithmRunner {
             System.out.println(bestGenome);
 
             generationsX.add(i);
-            fitnesesY.add(bestGenome.getFitness());
+            bestIndividuals.add(bestGenome.getFitness());
+            averageIndividuals.add(average);
+            worstIndividuals.add(worthGenome.getFitness());
 
             csvResults.add(new CsvResultLine(i, worthGenome.getFitness(), average, bestGenome.getFitness()));
 
@@ -105,7 +109,9 @@ public class GeneticAlgorithmRunner {
 
         String filename = "results/" + generations + "/" + populationSize + "/" + identifierOfTheRun + "_" + file.substring(file.lastIndexOf("/") + 1) + ".csv";
 
-        updateFileToFitnessMap(filename,csvResults.get(csvResults.size() -1).getBestResult(),csvResults);
+//        updateFileToFitnessMap(filename,csvResults.get(csvResults.size() -1).getBestResult(),csvResults);
+
+        drawChart(null,bestIndividuals,averageIndividuals,worstIndividuals);
 
 
     }
@@ -145,7 +151,7 @@ public class GeneticAlgorithmRunner {
                 newPopulation.addAll(parents);
             }
         }
-        return newPopulation;
+        return new ArrayList<>(newPopulation);
     }
 
     private List<Genome> crossover(List<Genome> population, CrossoverType crossoverType) {

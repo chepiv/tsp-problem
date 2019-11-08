@@ -6,12 +6,13 @@ import com.chepiv.utils.DataParser;
 import com.chepiv.utils.DistanceMatrix;
 import com.github.sh0nk.matplotlib4j.Plot;
 import com.github.sh0nk.matplotlib4j.PythonExecutionException;
+import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.XYChart;
+import org.knowm.xchart.XYChartBuilder;
+import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by chepiv on 30/10/2019.
@@ -41,6 +42,21 @@ public interface Algorithm {
         List<Integer> route = new ArrayList<>(genome.getRoute());
         Collections.swap(route, random.nextInt(route.size() - 1), random.nextInt(route.size() - 1));
         return new Genome(route, startingCity, numberOfCities);
+    }
+
+    default void drawChart(List<Integer> candidates, List<Integer> bestInds, List<Double> average, List<Integer> worst) {
+
+        // Create Chart
+        XYChart chart = new XYChartBuilder().width(1600).height(800).title("Area Chart").xAxisTitle("Generation").yAxisTitle("Fitness").build();
+        Optional.ofNullable(candidates).map(c -> chart.addSeries("candidates",c).setMarker(SeriesMarkers.NONE).setLabel("candidates"));
+        Optional.ofNullable(bestInds).map(b -> chart.addSeries("bestInds",b).setMarker(SeriesMarkers.NONE).setLabel("best"));
+        Optional.ofNullable(average).map(a -> chart.addSeries("average",a).setMarker(SeriesMarkers.NONE).setLabel("average"));
+        Optional.ofNullable(worst).map(w -> chart.addSeries("worst",w).setMarker(SeriesMarkers.NONE).setLabel("worst"));
+        chart.getStyler().setLegendVisible(true);
+
+
+        new SwingWrapper(chart).displayChart();
+
     }
 
     default void drawPlot(List<Integer> bestFitnessesHistory, List<Integer> generationsHistory) throws IOException, PythonExecutionException {

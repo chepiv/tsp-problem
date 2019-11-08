@@ -19,14 +19,16 @@ import java.util.Map;
 public class Main {
     public static void main(String[] args) throws Exception {
         GeneticAlgorithm algorithm;
-        int[] generations = {1000};
-        int[] populationSizes = {100,1000};
-        double[] pxRates = {0.5, 1.0};
-        double[] pmRates = {0.1, 0.35};
+        int[] generations = {100};
+        int[] populationSizes = {100};
+        double[] pxRates = {0.9};
+        double[] pmRates = {0.05};
         int startingCity = 0;
         int tournamentSize = 0;
-        MutationType[] mutationTypes = {MutationType.SWAP, MutationType.INVERSE};
-        CrossoverType[] crossoverTypes = {CrossoverType.PMX, CrossoverType.OX};
+//        MutationType[] mutationTypes = {MutationType.SWAP, MutationType.INVERSE};
+        MutationType[] mutationTypes = {MutationType.INVERSE};
+//        CrossoverType[] crossoverTypes = {CrossoverType.PMX, CrossoverType.OX};
+        CrossoverType[] crossoverTypes = {CrossoverType.PMX};
         CsvWriter csvWriter = new CsvWriter();
         String berlin52 = "berlin52";
         String gr666 = "gr666";
@@ -36,11 +38,11 @@ public class Main {
         Map<String,Integer> fileToFitness = new HashMap<>(5);
 
 
-        String[] filesNamesEasy = {"berlin11_modified.tsp", "berlin52.tsp"};
-        String[] filesNamesMedium = {"data/kroA200.tsp"}; //remove 100, 150 for 500
+        String[] filesNamesEasy = {"data/berlin52.tsp"};
+//        String[] filesNamesMedium = {"data/kroA200.tsp"}; //remove 100, 150 for 500
 
 
-        for (String fileName : filesNamesMedium) {
+        for (String fileName : filesNamesEasy) {
             int i = 0;
             for (int generation : generations) {
                 for (int populationSize : populationSizes) {

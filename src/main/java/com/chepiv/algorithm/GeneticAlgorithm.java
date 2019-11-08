@@ -42,19 +42,21 @@ public class GeneticAlgorithm {
         for (int i = 0; i < reproductionSize; i++) {
             selected.add(tournamentSelection(population));
         }
-        return selected;
+        return new ArrayList<>(selected);
     }
 
     public static List<Genome> pickNRandomElements(List<Genome> list, int n) {
         Collections.shuffle(list);
-        return list.stream()
+        List<Genome> collect = list.stream()
                 .limit(n)
                 .collect(Collectors.toList());
+        return new ArrayList<>(collect);
     }
 
     public Genome tournamentSelection(List<Genome> population) {
         List<Genome> selected = pickNRandomElements(population, tournamentSize);
-        return Collections.min(selected);
+        Genome min = Collections.min(selected);
+        return new Genome(min.getRoute(),startingCity,numberOfCities);
     }
 
 
