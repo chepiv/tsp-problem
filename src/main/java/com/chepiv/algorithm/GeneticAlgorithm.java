@@ -47,10 +47,9 @@ public class GeneticAlgorithm {
 
     public static List<Genome> pickNRandomElements(List<Genome> list, int n) {
         Collections.shuffle(list);
-        List<Genome> collect = list.stream()
+        return list.stream()
                 .limit(n)
                 .collect(Collectors.toList());
-        return new ArrayList<>(collect);
     }
 
     public Genome tournamentSelection(List<Genome> population) {
@@ -261,9 +260,9 @@ public class GeneticAlgorithm {
     }
 
     public void swap(List<Genome> genomes, double pm){
-        double rand = ThreadLocalRandom.current().nextDouble(0, 1);
 
         for (Genome genome : genomes) {
+            double rand = ThreadLocalRandom.current().nextDouble(0, 1);
             if (rand <= pm) {
                 swapMutation(genome);
                 genome.recalculateFitness();
@@ -273,8 +272,8 @@ public class GeneticAlgorithm {
     }
 
     public void inverse(List<Genome> genomes, double pm) {
-        double rand = ThreadLocalRandom.current().nextDouble(0, 1);
         for (Genome genome : genomes) {
+            double rand = ThreadLocalRandom.current().nextDouble(0, 1);
             if (rand <= pm) {
                 inverseMutation(genome);
                 genome.recalculateFitness();

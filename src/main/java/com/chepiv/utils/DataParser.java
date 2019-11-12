@@ -24,7 +24,7 @@ public class DataParser {
         String type = reader.readLine();
         String comment = reader.readLine();
         int dimensions = Integer.parseInt(reader.readLine().split("\\s+")[1]);
-        String edge_weight_type = reader.readLine();
+        String edge_weight_type = reader.readLine() ;
         String displayDataType = reader.readLine();
         reader.readLine(); // nodes header
 
