@@ -25,6 +25,7 @@ public class SimulatedAnnealing implements Algorithm {
     private double coolingRate;
     private List<CsvResultLine> csvResults;
     private CsvWriter csvWriter;
+    private double bestFitness;
 
     public SimulatedAnnealing(String filename, double temperature, int maxNumOfIterations, int numOfNeighbours, double coolingRate) {
         this.filename = filename;
@@ -70,12 +71,18 @@ public class SimulatedAnnealing implements Algorithm {
 
         generationsHistory.add(i++);
         bestFitnessesHistory.add(bestIndividual.getFitness());
-        System.out.println("Final solution distance: " + bestIndividual.getFitness());
+        int fitness = bestIndividual.getFitness();
+        bestFitness = fitness;
+        System.out.println("Final solution distance: " + fitness);
         System.out.println("Tour: " + bestIndividual);
 
 
-        drawChart(candidateHistory, bestFitnessesHistory, null, null);
-        draw();
+//        drawChart(candidateHistory, bestFitnessesHistory, null, null);
+//        draw();
+    }
+
+    public double getDataForAnalytics(){
+        return bestFitness;
     }
 
 

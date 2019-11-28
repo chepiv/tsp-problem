@@ -31,6 +31,9 @@ public class TabuSearchAlgorithm implements Algorithm {
     private List<CsvResultLine> csvResults;
     private CsvWriter csvWriter;
 
+    private Integer bestFitness;
+    private Integer numOfFitnessChecks;
+
     public TabuSearchAlgorithm(int tabuListSize,
                                int numOfNeighbours,
                                int maxIterations, String fileName, int startingCity) {
@@ -79,7 +82,14 @@ public class TabuSearchAlgorithm implements Algorithm {
             csvResults.add(new CsvResultLine(i,worstNeighbour.getFitness(), (double) candidate.getFitness(),best.getFitness()));
         }
         draw();
+        bestFitness = Collections.min(bestFitnessesHistory);
+        numOfFitnessChecks = currentMaxIterations * numOfNeighbours;
+//        drawChart(bestCandidateHistory,bestFitnessesHistory,null,worstNeighboursHistory);
 //        drawPlotTS(bestFitnessesHistory,bestCandidateHistory,worstNeighboursHistory,generationsHistory);
+    }
+
+    public double getDataForAnalytics(){
+        return bestFitness.doubleValue();
     }
 
     public void drawPlotTS(List<Integer> bestFitnessesHistory, List<Integer> bestCandidate,List<Integer> worstCandidate, List<Integer> generationsHistory) throws IOException, PythonExecutionException {

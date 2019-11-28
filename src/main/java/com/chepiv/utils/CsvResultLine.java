@@ -21,7 +21,7 @@ public class CsvResultLine{
         this.worstResult = worstResult;
         this.averageResult = averageResult;
         this.bestResult = bestResult;
-        this.temp = temp;
+//        this.temp = temp;
     }
 
 //    @CsvBindByName(column = "generation", required = true)
@@ -37,8 +37,8 @@ public class CsvResultLine{
     @CsvBindByPosition(position = 3)
     private Integer bestResult;
 //    @CsvBindByName(column = "temp", required = false)
-    @CsvBindByPosition(position = 4)
-    private Double temp;
+//    @CsvBindByPosition(position = 4)
+//    private Double temp;
 
     public Integer getBestResult() {
         return bestResult;
@@ -72,7 +72,7 @@ public class CsvResultLine{
         this.generation = generation;
     }
 
-    public double getTemp() {
-        return temp;
-    }
+//    public double getTemp() {
+//        return temp;
+//    }
 }

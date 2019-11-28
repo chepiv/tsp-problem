@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.chepiv.model.City;
 import com.chepiv.model.Genome;
 import com.chepiv.utils.*;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -33,6 +34,10 @@ public class GeneticAlgorithmRunner implements Algorithm{
     private String file = berlin52;
     int identifierOfTheRun;
     Map<String,Integer> fileToFitness;
+    int bestFitness;
+    int iterations;
+    int worstFitness;
+
 
     public GeneticAlgorithmRunner(int populationSize,
                                   int generations,
@@ -110,10 +115,24 @@ public class GeneticAlgorithmRunner implements Algorithm{
         String filename = "results/" + generations + "/" + populationSize + "/" + identifierOfTheRun + "_" + file.substring(file.lastIndexOf("/") + 1) + ".csv";
 
 //        updateFileToFitnessMap(filename,csvResults.get(csvResults.size() -1).getBestResult(),csvResults);
+//        saveResultToFile(csvResults,filename);
 
+//        System.out.println("--------------------------------------FINAL BEST RESULTS TO ANALYZE--------------------------------------");
+        Integer min = Collections.min(bestIndividuals);
+        Integer max = Collections.max(bestIndividuals);
+        System.out.println("OPTIMUM: "+ min);
+        bestFitness = min;
+        worstFitness = max;
+//        System.out.println("Number of iterations" + populationSize*generations);
+        iterations = populationSize*generations;
         drawChart(null,bestIndividuals,averageIndividuals,worstIndividuals);
 
 
+    }
+
+
+    public Pair<Integer, Integer> getDataToAnalytics(){
+        return Pair.of(bestFitness,worstFitness);
     }
 
     private void saveResultToFile(List<CsvResultLine> csvResults, String filename) throws Exception {
