@@ -72,11 +72,26 @@ public class GeneticAlgorithmRunner implements Algorithm{
 
         //GENERATING RANDOM FIRST POPULATION
 
+        double temperature = 1500;
+        double coolingRate = 0.9998;
+        int startingCity = 0;
+        String fileName = "data/kroA100.tsp";
+        int numOfNeighbours = 5;
+        int maxNumOfIterations = 3000;
+        List<Double> best = new ArrayList<>();
+
+
+
         List<Genome> population = Lists.newArrayList();
         int numberOfCities = cities.size();
         for (int i = 0; i < populationSize; i++) {
-            population.add(new Genome(startingCity, numberOfCities));
+//            population.add(new Genome(startingCity, numberOfCities));
+            SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(file,temperature,maxNumOfIterations,numOfNeighbours,coolingRate);
+            simulatedAnnealing.run();
+            population.add(simulatedAnnealing.getBestGenome());
         }
+
+
 
         int reproductionSize = 2;
 

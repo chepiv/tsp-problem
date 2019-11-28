@@ -24,10 +24,10 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         GeneticAlgorithm algorithm;
-        int[] generations = {1000};
-        int[] populationSizes = {1000};
+        int[] generations = {300};
+        int[] populationSizes = {300};
         double[] pxRates = {0.9};
-        double[] pmRates = {0.05};
+        double[] pmRates = {0.1};
         int startingCity = 0;
         int tournamentSize = 0;
 //        MutationType[] mutationTypes = {MutationType.SWAP, MutationType.INVERSE};
@@ -43,11 +43,11 @@ public class Main {
         Map<String,Integer> fileToFitness = new HashMap<>(5);
 
 
-        String[] filesNamesEasy = {"data/ali535.tsp"};
+        String[] filesNamesEasy = {"data/berlin52.tsp"};
 //        String[] filesNamesMedium = {"data/kroA200.tsp"}; //remove 100, 150 for 500
 
 
-        for (int z = 0; z < 2; z++) {
+        for (int z = 0; z < 1; z++) {
             for (String fileName : filesNamesEasy) {
                 int i = 0;
                 for (int generation : generations) {

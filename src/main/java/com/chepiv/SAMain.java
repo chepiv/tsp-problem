@@ -17,14 +17,14 @@ public class SAMain {
         double temperature = 1500;
         double coolingRate = 0.9998;
         int startingCity = 0;
-        String fileName = "data/kroA200.tsp";
+        String fileName = "data/kroA100.tsp";
         int numOfNeighbours = 5;
         int maxNumOfIterations = 3000;
         List<Double> best = new ArrayList<>();
 
 
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1; i++) {
             SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(fileName,temperature, maxNumOfIterations, numOfNeighbours, coolingRate);
             simulatedAnnealing.run();
             double dataForAnalytics = simulatedAnnealing.getDataForAnalytics();
